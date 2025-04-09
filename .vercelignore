@@ -1,0 +1,7 @@
+scripts/
+contracts/
+test/
+hardhat.config.ts
+.env
+.env.*
+!.env.example 
