@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import { useAccount, useContractRead } from 'wagmi';
 import { formatEther } from 'viem';
 
@@ -8,7 +9,7 @@ const TOKEN_ADDRESS = '0x...'; // Will be filled after deployment
 export function TokenBalance() {
   const { address, isConnected } = useAccount();
 
-  const { data: balance } = useContractRead({
+  const { data: balance, isLoading } = useContractRead({
     address: TOKEN_ADDRESS as `0x${string}`,
     abi: [{
       name: 'balanceOf',
@@ -20,12 +21,20 @@ export function TokenBalance() {
     functionName: 'balanceOf',
     args: [address as `0x${string}`],
     enabled: Boolean(address),
-  });
+  }) as { data: bigint | undefined, isLoading: boolean };
 
   if (!isConnected) {
     return (
       <div className="text-gray-400">
         Connect your wallet to view your GLTR balance
+      </div>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <div className="text-gray-400">
+        Loading balance...
       </div>
     );
   }
